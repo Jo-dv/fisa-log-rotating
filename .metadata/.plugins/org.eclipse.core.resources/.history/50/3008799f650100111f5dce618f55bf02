@@ -1,0 +1,23 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class LogbackCheck {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(LogbackCheck.class);
+
+    public static void main(String[] args) throws InterruptedException {
+
+        log.info("===== Logback basic configuration check START =====");
+        log.debug("This is DEBUG (INFO 레벨이면 안 보일 수도 있음)");
+        log.warn("This is WARN");
+        log.error("This is ERROR");
+
+        // 파일 로테이팅 확인용 (로그를 많이 찍기)
+        for (int i = 0; i < 100_000; i++) {
+            log.info("Log rolling test line = {}", i);
+        }
+
+        log.info("===== Logback basic configuration check END =====");
+    }
+}
