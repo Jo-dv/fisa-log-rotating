@@ -1,7 +1,0 @@
-INDEX VERSION 1.134+C:\Users\3-33\Desktop\fisa_log_rotating\.metadata\.plugins\org.eclipse.jdt.core
-1291395421.index
-152473948.index
-2843092119.index
-1865797976.index
-2898544887.index
-380150754.index

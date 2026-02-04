@@ -1,5 +1,0 @@
-package fisa.log_rotating.log;
-
-public class LogBackCheck {
-
-}
