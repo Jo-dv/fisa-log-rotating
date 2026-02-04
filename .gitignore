@@ -1,0 +1,9 @@
+
+# Eclipse workspace
+.metadata/
+# Maven build output
+target/
+# logs
+logs/
+*.log
+
