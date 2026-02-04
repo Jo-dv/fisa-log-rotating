@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <property name="LOG_PATH" value="./logs" />
+
+    <conversionRule conversionWord="mask" converterClass="com.example.utils.MaskingConverter" />
+
+    <appender name="TRANS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/transaction.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/transaction.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level - %mask(%msg)%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ACCESS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/access.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>180</maxHistory> </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [ACCESS] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+	<appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/error.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+    <appender name="SYSTEM_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/system.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/system.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+	<!-- queueSize(512개)를 넘는 요청이 한꺼번에 들어온 경우 입출금 로직이 미뤄진다. -->
+	<!-- discardingThreshold: default => queue가 꽉 찰 경우 INFO 로그는 버린다. 
+							: 0 => queue가 꽉 차더라도 로그를 버리지 않는다. -->
+    <appender name="ASYNC_TRANS" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="TRANS_FILE" />
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+    </appender>
+
+	<!--  queueSize: (default) 256 -->
+	<!-- root level: ERROR => 임계값과 상관없이 로그가 버려지지 않음 ->  -->
+    <appender name="ASYNC_SYSTEM" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="SYSTEM_FILE" />
+        <includeCallerData>false</includeCallerData>
+    </appender>
+
+	<!-- level=INFO 로 설정 시 INFO 이상의 로그(INFO, WARN, ERROR)를 기록 -->
+	<!-- additivity=false: true로 설정 시 상위(root)에게도 로그 전달 | 중복 로깅 방지 위해 false로 설정 -->
+    <logger name="com.bank.transaction" level="INFO" additivity="false">
+        <appender-ref ref="ASYNC_TRANS" />
+        <appender-ref ref="ERROR_FILE" />
+    </logger>
+
+    <logger name="com.bank.access" level="INFO" additivity="false">
+        <appender-ref ref="ACCESS_FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </logger>
+
+    <root level="INFO"> <appender-ref ref="SYSTEM_FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </root>
+</configuration>
