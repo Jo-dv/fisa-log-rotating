@@ -1,69 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <property name="LOG_PATH" value="./logs" />
 
-	<!-- 로그 저장 위치 -->
-	<property name="LOG_PATH" value="logs" />
-	<property name="APP_NAME" value="app" />
+    <!-- (중요) MaskingConverter 제거: 클래스가 없어서 에러남 -->
 
-	<!-- ========================= -->
-	<!-- 콘솔 로그 -->
-	<!-- ========================= -->
-	<appender name="CONSOLE"
-		class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n
-			</pattern>
-			<charset>UTF-8</charset>
-		</encoder>
-	</appender>
+    <appender name="TRANS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/transaction.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/transaction.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>90</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
 
-	<!-- ========================= -->
-	<!-- 파일 로그 + 로테이팅 -->
-	<!-- ========================= -->
-	<appender name="FILE"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="ACCESS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/access.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <maxHistory>180</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ACCESS] %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
 
-		<!-- 현재 로그 파일 -->
-		<file>${LOG_PATH}/${APP_NAME}.log</file>
+    <appender name="SYSTEM_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/system.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/system.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
 
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n
-			</pattern>
-			<charset>UTF-8</charset>
-		</encoder>
+    <appender name="ASYNC_TRANS" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="TRANS_FILE" />
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+    </appender>
 
-		<!-- 날짜 + 용량 기준 로테이팅 -->
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+    <appender name="ASYNC_SYSTEM" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="SYSTEM_FILE" />
+        <includeCallerData>false</includeCallerData>
+    </appender>
 
-			<!-- 예: app.2026-02-04.0.log.gz -->
-			<fileNamePattern>
-				${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.%i.log.gz
-			</fileNamePattern>
+    <!-- 기능별 라우팅 -->
+    <logger name="fisa.log_rotating.log.transcation" level="INFO" additivity="false">
+        <appender-ref ref="ASYNC_TRANS" />
+    </logger>
 
-			<!-- 한 파일 최대 크기 -->
-			<maxFileSize>100MB</maxFileSize>
+    <logger name="fisa.log_rotating.log.access" level="INFO" additivity="false">
+        <appender-ref ref="ACCESS_FILE" />
+    </logger>
 
-			<!-- 보관 일수 -->
-			<maxHistory>14</maxHistory>
-
-			<!-- 전체 로그 용량 제한 -->
-			<totalSizeCap>2GB</totalSizeCap>
-
-		</rollingPolicy>
-	</appender>
-
-	<!-- ========================= -->
-	<!-- 루트 로거 -->
-	<!-- ========================= -->
-	<root level="INFO">
-		<appender-ref ref="CONSOLE" />
-		<appender-ref ref="FILE" />
-	</root>
-
-	<!-- 패키지별 로그 레벨 예시 -->
-	<!-- <logger name="com.mycompany" level="DEBUG"/> -->
+    <!-- 기본은 system.log -->
+    <root level="INFO">
+        <appender-ref ref="ASYNC_SYSTEM" />
+    </root>
 
 </configuration>

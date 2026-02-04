@@ -1,2 +1,3 @@
-2026/02/04-09:42:39.360 1af0 Creating DB C:\Users\3-33\Desktop\fisa_log_rotating\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Sync Data\LevelDB since it was missing.
-2026/02/04-09:42:39.375 1af0 Reusing MANIFEST C:\Users\3-33\Desktop\fisa_log_rotating\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Sync Data\LevelDB/MANIFEST-000001
+2026/02/04-11:01:10.220 590c Reusing MANIFEST C:\Users\3-33\Desktop\fisa_log_rotating\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Sync Data\LevelDB/MANIFEST-000001
+2026/02/04-11:01:10.223 590c Recovering log #3
+2026/02/04-11:01:10.224 590c Reusing old log C:\Users\3-33\Desktop\fisa_log_rotating\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Sync Data\LevelDB/000003.log 
