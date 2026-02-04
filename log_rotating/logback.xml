@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?><?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
     <property name="LOG_PATH" value="./logs" />
-
-    <conversionRule conversionWord="mask" converterClass="com.example.utils.MaskingConverter" />
 
     <appender name="TRANS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/transaction.log</file>
@@ -13,7 +11,7 @@
             <maxHistory>90</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level - %mask(%msg)%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level - (%msg)%n</pattern>
         </encoder>
     </appender>
 
@@ -73,12 +71,12 @@
 
 	<!-- level=INFO 로 설정 시 INFO 이상의 로그(INFO, WARN, ERROR)를 기록 -->
 	<!-- additivity=false: true로 설정 시 상위(root)에게도 로그 전달 | 중복 로깅 방지 위해 false로 설정 -->
-    <logger name="com.bank.transaction" level="INFO" additivity="false">
+    <logger name="fisa.log_rotating.log.transcation" level="INFO" additivity="false">
         <appender-ref ref="ASYNC_TRANS" />
         <appender-ref ref="ERROR_FILE" />
     </logger>
 
-    <logger name="com.bank.access" level="INFO" additivity="false">
+    <logger name="fisa.log_rotating.log.access" level="INFO" additivity="false">
         <appender-ref ref="ACCESS_FILE" />
         <appender-ref ref="ERROR_FILE" />
     </logger>
