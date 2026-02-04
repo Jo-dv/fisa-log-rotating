@@ -2,7 +2,7 @@
 <configuration>
     <property name="LOG_PATH" value="./logs" />
 
-    <!-- (중요) MaskingConverter 제거: 클래스가 없어서 에러남 -->
+    <conversionRule conversionWord="mask" converterClass="utils.MaskingConverter" />
 
     <appender name="TRANS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/transaction.log</file>
@@ -13,7 +13,7 @@
             <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level - %mask(%msg)%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -54,7 +54,6 @@
         <includeCallerData>false</includeCallerData>
     </appender>
 
-    <!-- 기능별 라우팅 -->
     <logger name="fisa.log_rotating.log.transcation" level="INFO" additivity="false">
         <appender-ref ref="ASYNC_TRANS" />
     </logger>
@@ -63,7 +62,6 @@
         <appender-ref ref="ACCESS_FILE" />
     </logger>
 
-    <!-- 기본은 system.log -->
     <root level="INFO">
         <appender-ref ref="ASYNC_SYSTEM" />
     </root>

@@ -1,0 +1,7 @@
+INDEX VERSION 1.134+/Users/jeenee/Desktop/fisa-log-rotating/.metadata/.plugins/org.eclipse.jdt.core
+4177752364.index
+1865797976.index
+1427179469.index
+2086716634.index
+3042447655.index
+3343369446.index
