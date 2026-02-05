@@ -62,6 +62,7 @@
     </appender>
 
 	<!--  queueSize: (default) 256 -->
+	<!--  includeCallerData=false: 호출자 정보(라인, 메서드) 미출력 -->
     <appender name="ASYNC_SYSTEM" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="SYSTEM_FILE" />
         <includeCallerData>false</includeCallerData>
