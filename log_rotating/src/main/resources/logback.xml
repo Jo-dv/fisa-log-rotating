@@ -62,7 +62,6 @@
     </appender>
 
 	<!--  queueSize: (default) 256 -->
-	<!-- root level: ERROR => 임계값과 상관없이 로그가 버려지지 않음 ->  -->
     <appender name="ASYNC_SYSTEM" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="SYSTEM_FILE" />
         <includeCallerData>false</includeCallerData>
