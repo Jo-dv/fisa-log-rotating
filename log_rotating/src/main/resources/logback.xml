@@ -80,7 +80,7 @@
         <appender-ref ref="ERROR_FILE" />
     </logger>
 
-    <root level="INFO"> <appender-ref ref="SYSTEM_FILE" />
-        <appender-ref ref="ERROR_FILE" />
+    <root level="INFO">
+    	<appender-ref ref="ASYNC_SYSTEM" /> <appender-ref ref="ERROR_FILE" />
     </root>
 </configuration>
